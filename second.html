@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <title>should I give this guy money?</title>
+    </head>
+    <body>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.14.1/dist/tf.min.js"></script>
+<script>
+   //smart,good idea, is rich
+    function func(){
+                 model.predict(x).print();
+        var iq =parseInt(prompt("is he/she smart??(1/0)"));
+        var idea=parseInt(prompt("does he/she have a good idea?(1/0)"));
+        var rich = parseInt(prompt("is he/she rich?(1/0)"));
+        document.body.innerHTML="<p style='font-family: sans-serif'>the probability of this turning out to be a good investment is: </p>";
+        console.log("training complete");
+        document.body.innerHTML+=Math.ceil(model.predict(tf.tensor2d([[iq,idea,rich]])).dataSync()*100);
+        document.body.innerHTML+="<button onclick='func()'>more prediction</button>"
+    }
+    var xs=[[1,0,1],[0,1,0],[1,0,1],[1,1,1],[0.56,1,1],[0.89,0,0],[0.50,0,0],[0.80,1,1],[0.29,0,1],[0.920,1,0],[0.810,0.5,1],[0.100,0.5,0.7],[0,0,0]];
+    var ys=[[0.06],[1],[1],[0.789],[1],[1],[0.678],[0.5234],[0.28],[0.999],[0.234],[0.96],[0]];
+    document.body.innerHTML="<p style='font-family: sans-serif'>pls wait the program is still training</p>";  
+    const x=tf.tensor2d(xs);
+    const y=tf.tensor2d(ys);
+    const model=tf.sequential();
+    const hidden = tf.layers.dense({
+        units:4,
+        inputShape:[3],
+        activation:'sigmoid'
+    });
+    const output = tf.layers.dense({
+        units:1,
+        activation:'sigmoid'
+    });
+    model.add(hidden);
+    model.add(output);
+    const config = {
+        optimizer:tf.train.sgd(0.3),
+        loss:tf.losses.absoluteDifference
+    }
+    model.compile(config);
+    train().then(function (){
+func();
+        document.body.innerHTML+="<button onclick='func()'>more prediction</button>"
+    });
+    async function train(){
+        for(let i=0;i<1000;i++){
+        const h = await model.fit(x,y,{epochs:10});
+        console.log(h.history.loss[0]);
+        }
+    }
+</script>
+<span id="span"></span>
+    </body>
+</html>
