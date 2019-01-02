@@ -1,14 +1,87 @@
 <html>
-    <body>
-        
+    <body style="background-color:ghostwhite">
 <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script>
       <!-- <script src="https://www.gstatic.com/firebasejs/5.0.0/firebase-database.js"></script>-->
-        <script src="data.js"></script>
-      
-        </form>
-            <script>
-  // Initialize Firebase
+        <script>
+        var message,alldata,name;
+var colors=['lightpink','lightgreen','lightblue','lightgray'];
+var tr=false;
+var config = {
+    apiKey: "AIzaSyBVxOLTli6ellP4gsRFnBKIVfyMn8d5F9c",
+    authDomain: "machine-7ca6e.firebaseapp.com",
+    databaseURL: "https://machine-7ca6e.firebaseio.com",
+    projectId: "machine-7ca6e",
+    storageBucket: "machine-7ca6e.appspot.com",
+    messagingSenderId: "355310789654"
+  };
+  firebase.initializeApp(config);
+  database = firebase.database();
+function sendData(){
 
-</script>
+    let colorDatabase = database.ref("colors");
+//getting data starts here
+    colorDatabase.once("value",gotData);
+    function gotData(results){
+        let data=results.val();
+        let keys = Object.keys(data);
+        
+        alldata={
+            entries:[]
+        };
+    for(let key of keys){
+        let record=data[key];
+        alldata.entries.push(record);
+    }
+          console.log(alldata.entries[0]);
+        for (let i=(alldata.entries.length-1);i>0;i--){
+            document.body.innerHTML+="<div style='position:relative;background-color:"+colors[Math.floor(Math.random()*colors.length)]+";border-radius: 26px;color:white'><p style='font-family:sans-serif;text-align:center'> name:"+alldata.entries[i]["name"]+"</p><br><p>    <p><h3 style='font-family:sans-serif'>"+alldata.entries[i].message+"</h3><br></div>";
+        }
+     
+        
+    }//ends here
+    
+
+    
+    
+  // Make an object with data in it
+  var data = {
+    message:message,
+      name:name
+  };
+  console.log("saving data");
+  console.log(data);
+
+  let color = colorDatabase.push(data, finished);
+  console.log("Firebase generated key: " + color.key);
+
+  tr=true;
+
+  // Reload the data for the page
+  function finished(err) {
+    if (err) {
+      console.error("ooops, something went wrong.");
+      console.error(err);
+    } else {
+      console.log('Data saved successfully');
+
+    }
+  }
+}
+function dataSend(){
+    let question =parseInt(prompt("do you want to leave a message?(1/0)"));
+    if(question===1){
+    message =prompt("your message...");
+    name=prompt("what is your name?");
+        sendData();
+    }
+    else{
+        sendData();
+    }
+   
+} 
+dataSend()
+
+        </script>
     </body>
 </html>
