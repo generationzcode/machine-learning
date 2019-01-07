@@ -1,0 +1,74 @@
+<html>
+<body><br><br><br><br>
+    <div id="id" style=""></div>
+<!--<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.14.1/dist/tf.min.js"></script>-->
+    <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+    <script>
+        var redBod=Math.floor(Math.random()*255);
+        var greenBod=Math.floor(Math.random()*255);
+        var blueBod=Math.floor(Math.random()*255);
+        var redDiv=Math.floor(Math.random()*255);
+        var greenDiv=Math.floor(Math.random()*255);
+        var blueDiv=Math.floor(Math.random()*255);
+        document.getElementById("id").style.backgroundColor="rgb("+redDiv+","+greenDiv+","+blueDiv+")";
+        document.getElementById("id").style.height="30%";
+        document.getElementById("id").style.width="30%";
+        document.getElementById("id").style.margin="auto";
+        document.getElementById("id").style.borderRadius="23px";
+        document.body.style.backgroundColor="rgb("+redBod+","+greenBod+","+blueBod+")"
+        var ultimateQuestion;
+        function q(){ 
+            ultimateQuestion=prompt("do you think this is a good colour combination?(1/0)");
+       }
+        setTimeout(q,2000);
+        var config = {
+    apiKey: "AIzaSyCTfmsiPdffvQchUrnDwDv9m8SUSEzo1qU",
+    authDomain: "machine-f60e6.firebaseapp.com",
+    databaseURL: "https://machine-f60e6.firebaseio.com",
+    projectId: "machine-f60e6",
+    storageBucket: "machine-f60e6.appspot.com",
+    messagingSenderId: "829526108897"
+  };
+  firebase.initializeApp(config);
+  database = firebase.database();
+      var gamedatabase = database.ref("colourCombo");
+        function sendData(){
+
+ //getting data starts here
+    
+    
+ 
+    
+  // Make an object with data in it
+  var data = {
+      redDiv:redDiv,
+      greenDiv:greenDiv,
+      blueDiv:blueDiv,
+      redBod:redBod,
+      greenBod:greenBod,
+      blueBod:blueBod,
+      question:ultimateQuestion
+  };
+  console.log("saving data");
+  console.log(data);
+
+  let color = gamedatabase.push(data, finished);
+  console.log("Firebase generated key: " + color.key);
+
+
+  // Reload the data for the page
+  function finished(err) {
+    if (err) {
+      console.error("ooops, something went wrong.");
+      console.error(err);
+    } else {
+      console.log('Data saved successfully');
+
+    }
+  }
+}
+        setTimeout(sendData,4000);
+
+    </script>    <br><br><br><br><br>
+</body>
+</html>
